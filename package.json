@@ -40,6 +40,7 @@
     "ghget",
     "fetch",
     "retrieve",
+    "list",
     "api",
     "request",
     "cli",
