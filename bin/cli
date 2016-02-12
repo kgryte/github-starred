@@ -1,0 +1,117 @@
+#!/usr/bin/env node
+'use strict';
+
+// MODULES //
+
+var fs = require( 'fs' );
+var path = require( 'path' );
+var parseArgs = require( 'minimist' );
+var notifier = require( 'update-notifier' );
+var pkg = require( './../package.json' );
+var opts = require( './opts.json' );
+var get = require( './../lib' );
+
+
+// VARIABLES //
+
+var token;
+var args;
+
+
+// FUNCTIONS //
+
+/**
+* FUNCTION: onClose()
+*	Callback invoked upon writing a file to `stdout`.
+*
+* @private
+*/
+function onClose() {
+	process.exit( 0 );
+}
+
+
+// INIT //
+
+process.stdout.on( 'error', process.exit );
+
+
+// PACKAGE UPDATES //
+
+notifier( { 'pkg': pkg } ).notify();
+
+
+// ARGUMENTS //
+
+args = parseArgs( process.argv.slice( 2 ), opts );
+
+
+// HELP //
+
+if ( args.help ) {
+	fs.createReadStream( path.join( __dirname, 'usage.txt' ) )
+		.pipe( process.stdout )
+		.on( 'close', onClose );
+    return;
+}
+
+
+// VERSION //
+
+if ( args.version ) {
+	console.log( pkg.version );
+	return;
+}
+
+
+// OPTIONS //
+
+opts = {};
+
+if ( args.useragent ) {
+	opts.useragent = args.useragent;
+}
+if ( args.username ) {
+	opts.username = args.username;
+}
+if ( args.token ) {
+	token = args.token;
+}
+else if ( process.env.GITHUB_TOKEN ) {
+	token = process.env.GITHUB_TOKEN;
+}
+if ( token ) {
+	opts.token = token;
+}
+if ( args.sort ) {
+	opts.sort = args.sort;
+}
+if ( args.direction ) {
+	opts.direction = args.direction;
+}
+
+
+// STARRED //
+
+get( opts, clbk );
+
+/**
+* FUNCTION: clbk( error, data, info )
+*	Callback invoked upon receiving a request response.
+*
+* @private
+* @param {Error|Null} error - error object
+* @param {Array[]} data - response data
+* @param {Object} info - rate limit info
+* @returns {Void}
+*/
+function clbk( error, data, info ) {
+	if ( info ) {
+		process.stderr.write( JSON.stringify( info ) + '\n' );
+	}
+	if ( error ) {
+		process.stderr.write( error.message );
+		return;
+	}
+	process.stdout.write( JSON.stringify( data ) + '\n' );
+}
