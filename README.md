@@ -49,8 +49,8 @@ The `function` accepts the following `options`:
 *	__token__: Github [access token][github-token].
 *	__username__: Github username.
 *	__useragent__: [user agent][github-user-agent] `string`.
-*	__sort__: sort method. Either `'created'` or `'updated'`. Default: `'created'`.
-*	__direction__: sort direction. Either `'asc'` or `'desc'`. Default: `'desc'`.
+*	__sort__: sort method. Can be either `'created'` or `'updated'`. Default: `'created'`.
+*	__direction__: sort direction. Can be either `'asc'` or `'desc'`. Default: `'desc'`.
 
 To [authenticate][github-oauth2] with Github, set the [`token`][github-token] option.
 
