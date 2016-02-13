@@ -1,6 +1,6 @@
 {
   "name": "github-starred",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Get a list of repositories a user has starred.",
   "author": {
     "name": "Athan Reines",
