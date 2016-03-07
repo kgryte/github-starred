@@ -82,24 +82,28 @@ tape( 'function returns a function', function test( t ) {
 tape( 'function returns a function which returns an error to a provided callback if an error is encountered when fetching starred repositories', function test( t ) {
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	opts = getOpts();
-	get = factory( opts, done );
-	get();
+	fcn = factory( opts, done );
+	fcn();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk({
-				'status': 404,
-				'message': 'beep'
-			});
-		}
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk({
+					'status': 404,
+					'message': 'beep'
+				});
+			}
+		};
 	}
 
 	function done( error ) {
@@ -113,23 +117,27 @@ tape( 'function returns a function which returns response data to a provided cal
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = data;
 
 	opts = getOpts();
-	get = factory( opts, done );
-	get();
+	fcn = factory( opts, done );
+	fcn();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk( null, data, info );
-		}
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk( null, data, info );
+			}
+		};
 	}
 
 	function done( error, data ) {
@@ -143,23 +151,27 @@ tape( 'function returns a function which returns rate limit info to a provided c
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = info;
 
 	opts = getOpts();
-	get = factory( opts, done );
-	get();
+	fcn = factory( opts, done );
+	fcn();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk( null, data, info );
-		}
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk( null, data, info );
+			}
+		};
 	}
 
 	function done( error, data, info ) {
@@ -173,10 +185,12 @@ tape( 'function returns a function which supports providing only a `username` op
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = data;
@@ -184,14 +198,16 @@ tape( 'function returns a function which supports providing only a `username` op
 	opts = getOpts();
 	delete opts.token;
 
-	get = factory( opts, done );
-	get();
+	fcn = factory( opts, done );
+	fcn();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk( null, data, info );
-		}
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk( null, data, info );
+			}
+		};
 	}
 
 	function done( error, data ) {
@@ -205,25 +221,29 @@ tape( 'function returns a function which supports providing only a `token` optio
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = data;
 
 	opts = getOpts();
 	delete opts.username;
-	
-	get = factory( opts, done );
-	get();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk( null, data, info );
-		}
+	fcn = factory( opts, done );
+	fcn();
+
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk( null, data, info );
+			}
+		};
 	}
 
 	function done( error, data ) {
@@ -237,10 +257,12 @@ tape( 'function returns a function which supports providing both `token` and `us
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = data;
@@ -248,15 +270,17 @@ tape( 'function returns a function which supports providing both `token` and `us
 	opts = getOpts();
 	opts.token = 'boopbeep';
 	opts.username = 'kgryte';
-	
-	get = factory( opts, done );
-	get();
 
-	function resolve( opts, clbk ) {
-		setTimeout( onTimeout, 0 );
-		function onTimeout() {
-			clbk( null, data, info );
-		}
+	fcn = factory( opts, done );
+	fcn();
+
+	function get( opts, clbk ) {
+		return function get() {
+			setTimeout( onTimeout, 0 );
+			function onTimeout() {
+				clbk( null, data, info );
+			}
+		};
 	}
 
 	function done( error, data ) {
@@ -270,10 +294,12 @@ tape( 'function returns a function which supports specifying a sort method and d
 	var expected;
 	var factory;
 	var opts;
-	var get;
+	var fcn;
 
 	factory = proxyquire( './../lib/factory.js', {
-		'@kgryte/github-get': resolve
+		'@kgryte/github-get': {
+			'factory': get
+		}
 	});
 
 	expected = 'sort=updated&direction=desc';
@@ -282,11 +308,13 @@ tape( 'function returns a function which supports specifying a sort method and d
 	opts.sort = 'updated';
 	opts.direction = 'desc';
 
-	get = factory( opts, noop );
-	get();
+	fcn = factory( opts, noop );
+	fcn();
 
-	function resolve( opts ) {
+	function get( opts ) {
 		t.equal( opts.query, expected, 'correctly compiles query string' );
-		t.end();
+		return function get() {
+			t.end();
+		};
 	}
 });

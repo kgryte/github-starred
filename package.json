@@ -54,14 +54,14 @@
     "@kgryte/github-get": "^3.0.3",
     "minimist": "^1.2.0",
     "update-notifier": "^0.6.0",
-    "utils-merge2": "^1.0.0",
+    "utils-merge2": "^2.0.0",
     "validate.io-function": "^1.0.2",
     "validate.io-object": "^1.0.4",
     "validate.io-string-primitive": "^1.0.0"
   },
   "devDependencies": {
     "@kgryte/noop": "^1.0.0",
-    "browserify": "12.x.x",
+    "browserify": "13.x.x",
     "chai": "3.x.x",
     "codecov": "1.x.x",
     "istanbul": "^0.4.1",
